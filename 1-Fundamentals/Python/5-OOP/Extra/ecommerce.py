@@ -289,7 +289,7 @@ class Warehouse:
             None. Prints an error message if the quantity is not positive.
         """
         try:
-            if quantity < 0:
+            if quantity > 0:
                 for i in range(quantity):
                     self.storage.append(product)
             else:
@@ -354,16 +354,18 @@ warehouse_1 = Warehouse('Taiga')
 warehouse_1.add_product(p1)
 warehouse_1.add_product(s1)
 warehouse_1.add_product(e1)
+warehouse_1.add_product(e1)
+warehouse_1.add_product(e1)
 warehouse_1.get_current_inventory()
 warehouse_1.remove_product(e1)
 warehouse_1.get_current_inventory()
 warehouse_1.calculate_total_value()
-warehouse_1.add_product(e1)
+warehouse_1.add_product(f1)
 warehouse_1.get_current_inventory()
 warehouse_1.calculate_total_value()
-warehouse_1.add_multiple_products(f1, 3)
+warehouse_1.add_multiple_products(f1, 6)
 warehouse_1.get_current_inventory()
 warehouse_1.count_product(f1)
 warehouse_1.count_all()
-warehouse_1.remove_multiple_products(f1, 2)
+warehouse_1.remove_multiple_products(f1, 4)
 warehouse_1.count_all()

@@ -18,7 +18,9 @@ class Product:
             name (str): The name of the product.
             price (float): The price of the product.
         """
-        # TODO in task 2.0
+        self.sku = sku
+        self.name = name
+        self.price = price
 
     def __str__(self):
         """
@@ -27,7 +29,8 @@ class Product:
         Returns:
             str: A string showing the product's name, SKU, and price.
         """
-        # TODO in task 2.0
+
+        return str(self.sku), str(self.name), str(self.price)
 
 
 class Shoes(Product):
