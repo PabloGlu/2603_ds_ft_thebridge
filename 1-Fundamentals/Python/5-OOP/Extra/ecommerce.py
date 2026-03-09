@@ -219,7 +219,9 @@ class Warehouse:
             return product.__str__()
         else:
             raise Exception('Product not found')
+        
     count = 0
+
     def count_product(self, prod):
         count = 0
         for product in self.storage:
