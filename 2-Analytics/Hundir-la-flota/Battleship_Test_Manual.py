@@ -16,7 +16,7 @@ tab_def_m1 = bs.create_m1_def()
 n = 1
 while True:
     print(f'Turno {n}: Ataca el P1')
-    disparo_p1 = bs.disparar_p1(tab_at_p1, tab_def_m1, bs.missile())
+    disparo_p1 = bs.disparar_p1_manual(tab_at_p1, tab_def_m1)
     time.sleep(1)
 
     if 'O' not in tab_def_m1:

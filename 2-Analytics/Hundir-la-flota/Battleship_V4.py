@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[277]:
-
-
 import numpy as np
 import random
 
@@ -81,7 +75,7 @@ def recibir_disparo_m1(tablero_def, coordenada):
         print("Pobre humano, repitió disparo")
     else:
         tablero_def[coordenada] = "_"
-        print("Bip Bup")
+        print("Bip Bup Water")
     print(f"Tablero de defensa de M1 \n {tablero_def}")
     print('*'*50)
     return tablero_def
@@ -92,26 +86,21 @@ def recibir_disparo_m1(tablero_def, coordenada):
 
 # La funcion disparar tiene que llamar a la funcion recibir disparo
 
-def disparar(tablero_at, tablero_def, coordenada, n=1):
-    if tablero_def[coordenada] == "O":
-        # tablero_def[coordenada] = "X"
-        tablero_at[coordenada] = "H"
-        print("Tocado")
-    elif tablero_def[coordenada] == "X":
-        print("Agonia, deja de perder el tiempo, dispara a otro sitio")
-        # if n > 0:
-        #     disparar(tablero_at, tablero_def, coordenada = coordenada2)
-        #     n-=1
-        # else:
+# # def disparar(tablero_at, tablero_def, coordenada):
+# #     if tablero_def[coordenada] == "O":
+# #         tablero_at[coordenada] = "H"
+# #         print("Tocado")
+# #     elif tablero_def[coordenada] == "X":
+# #         print("Agonia, deja de perder el tiempo, dispara a otro sitio")
 
-    else:
-        # tablero_def[coordenada] = "-"
-        tablero_at[coordenada] = 'W'
-        print("Agua")
-    recibir_disparo(tablero_def, coordenada)
-    print(f"Tablero at \n {tablero_at}")
-    print('*'*50)
-    return(tablero_at)
+
+# #     else:
+# #         tablero_at[coordenada] = 'W'
+# #         print("Agua")
+# #     recibir_disparo(tablero_def, coordenada)
+# #     print(f"Tablero at \n {tablero_at}")
+# #     print('*'*50)
+# #     return(tablero_at)
 
 
 # In[ ]:
@@ -119,29 +108,34 @@ def disparar(tablero_at, tablero_def, coordenada, n=1):
 
 def disparar_p1_manual(tablero_at, tablero_def):
     d_list = []
-    d = input(f'Has dado en el clavo en la coordenada ({coordenada[0]},  {coordenada[1]}). \n Dame una coordenada(2 números seguidos del 0 al 9):')
+    d = input(f'Dame una coordenada (2 números seguidos del 0 al 9) ')
     for x in d:
         d_list.append(int(x))
 
     coordenada = tuple(d_list)
+        
     if tablero_def[coordenada] == "O":
         tablero_at[coordenada] = "H"
         print("P1, le has dado a la maquina!")
-        while True:
-            d_list = []
-            d = input(f'Has dado en el clavo en la coordenada ({coordenada[0]},  {coordenada[1]}). \n Dame una coordenada(2 números seguidos del 0 al 9):')
+        print(tablero_at)
+        d_list = []
+        d = input(f'Has dado en el clavo en la coordenada ({coordenada[0]}, {coordenada[1]}). \n Dame otra coordenada: ')
+        try:
             for x in d:
                 d_list.append(int(x))
-
             coordenada = tuple(d_list)
-            disparar_p1_manual(tablero_at, tablero_def, coordenada)
-
+            disparar_p1_esp(tablero_at, tablero_def, coordenada)
+        except Exception as e:
+            print(f"ERROR {e}")
     elif tablero_def[coordenada] == "X":
         print("Agonia, la antesala de la muerte, deja de perder el tiempo, dispara a otro sitio")
-
-    else:
+    elif tablero_def[coordenada] == " ":
         tablero_at[coordenada] = 'W'
         print("Agua, la maquina se ha librado")
+    elif tablero_def[coordenada] == "_":
+        print("Agua, pero ya era agua. Que estás haciendo?")
+    else:
+        print("¿Cuando llega aquí?")
     recibir_disparo_m1(tablero_def, coordenada)
     print(f"Tablero de ataque de P1 \n {tablero_at}")
     print('*'*50)
@@ -150,31 +144,57 @@ def disparar_p1_manual(tablero_at, tablero_def):
 
 # In[ ]:
 
+def disparar_p1_esp(tablero_at, tablero_def, coordenada):
+    if tablero_def[coordenada] == "O":
+        tablero_at[coordenada] = "H"
+        print('*'*50)
+        print(f"Tablero de ataque de P1 \n {tablero_at}")
+        print('*'*50)
+        print("P1, le has dado a la maquina! Pero que maquina!")
+        d_list = []
+        d = input(f'Has vuelto a dar en el clavo en la coordenada ({coordenada[0]},  {coordenada[1]}). \n Dame otra coordenada, campeon!')
+        try:
+            for x in d:
+                d_list.append(int(x))
+            coordenada = tuple(d_list)
+            disparar_p1_esp(tablero_at, tablero_def, coordenada)
+        except Exception as e:
+            print(f"ERROR {e}")
+
+    elif tablero_def[coordenada] == "X":
+        print("Agonia, la antesala de la muerte, eres especial pero dispara a otro sitio")
+    elif tablero_def[coordenada] == " ":
+        tablero_at[coordenada] = 'W'
+        print("Agua, la maquina se ha librado, do better")
+    elif tablero_def[coordenada] == "_":
+        print("Agua, pero ya era agua. Estás bien?")
+    else:
+        print("¿Cuando llega aquí?")
+    recibir_disparo_m1(tablero_def, coordenada)
+    
+    return(tablero_at)
+
+## Tengo que actualizar semi
 
 def disparar_p1_semi(tablero_at, tablero_def, coordenada):
     if tablero_def[coordenada] == "O":
-        # tablero_def[coordenada] = "X"
         tablero_at[coordenada] = "H"
         print("P1, le has dado a la maquina!")
-        while True:
-            # x = int(input('TE PIDO EL EJE X DE LA COORDENADA'))
-            # y = int(input('TE PIDO EL EJE Y DE LA COORDENADA'))
-            d_list = []
-            d = input(f'Has dado en el clavo en la coordenada ({coordenada[0]},  {coordenada[1]}). \n Dame una coordenada(2 números seguidos del 0 al 9):')
+        print(tablero_at)
+        d_list = []
+        d = input(f'Has dado en el clavo en la coordenada ({coordenada[0]}, {coordenada[1]}). \n Dame otra coordenada: ')
+        try:
             for x in d:
                 d_list.append(int(x))
-            z = tuple(d_list)
-            disparar_p1_semi(tablero_at, tablero_def, z)
-            break
+            coordenada = tuple(d_list)
+            disparar_p1_esp(tablero_at, tablero_def, coordenada)
+        except Exception as e:
+            print(f"ERROR {e}. Me salto tu turno")
+
     elif tablero_def[coordenada] == "X":
         print("Agonia, la antesala de la muerte, deja de perder el tiempo, dispara a otro sitio")
-        # if n > 0:
-        #     disparar(tablero_at, tablero_def, coordenada = coordenada2)
-        #     n-=1
-        # else:
 
     else:
-        # tablero_def[coordenada] = "-"
         tablero_at[coordenada] = 'W'
         print("Agua, la maquina se ha librado")
     recibir_disparo_m1(tablero_def, coordenada)
@@ -221,6 +241,7 @@ def disparar_m1(tablero_at, tablero_def, coordenada):
     print(f"Tablero de ataque de la maquina \n {tablero_at}")
     print('*'*50)
     return(tablero_at)
+
 
 
 # In[285]:
@@ -376,20 +397,20 @@ print(tab_def_m1)
 # In[299]:
 
 
-n = 1
-while True:
-    print(f'Turno {n}: Ataca el P1')
-    disparo_p1 = disparar_p1(tab_at_p1, tab_def_m1, missile())
+# n = 1
+# while True:
+#     print(f'Turno {n}: Ataca el P1')
+#     disparo_p1 = disparar_p1(tab_at_p1, tab_def_m1, missile())
 
-    if 'O' not in tab_def_m1:
-        print('JUGADOR 1 HAS GANADO')
-        break
+#     if 'O' not in tab_def_m1:
+#         print('JUGADOR 1 HAS GANADO')
+#         break
 
-    print(f'Turno {n}: Ataca la maquina M1')
-    disparo_m1 = disparar_m1(tab_at_m1, tab_def_p1, missile())
-    n += 1
+#     print(f'Turno {n}: Ataca la maquina M1')
+#     disparo_m1 = disparar_m1(tab_at_m1, tab_def_p1, missile())
+#     n += 1
 
-    if 'O' not in tab_def_p1:
-        print('JUGADOR 1 HAS PERDIDO')
-        break
+#     if 'O' not in tab_def_p1:
+#         print('JUGADOR 1 HAS PERDIDO')
+#         break
 
