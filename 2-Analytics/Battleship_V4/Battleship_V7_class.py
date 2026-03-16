@@ -3,6 +3,41 @@
 import numpy as np
 import random
 import time
+from colorama import init, Fore, Back, Style
+
+init(autoreset=True)  # Resetea el color automáticamente tras cada print
+
+
+def print_tablero(tablero, titulo="Tablero"):
+    """
+    Imprime un tablero numpy con colores:
+      ' '  → fondo azul (agua vacía)
+      'O'  → verde (barco intacto)
+      'X'  → rojo (barco tocado/hundido)
+      'H'  → rojo (impacto registrado en tablero de ataque)
+      'W'  → azul oscuro (agua ya disparada)
+      '_'  → azul oscuro (agua ya disparada, variante)
+    """
+    CELDA = {
+        ' ':  Back.BLUE   + Fore.BLUE    + ' ~ ' + Style.RESET_ALL,
+        'O':  Back.GREEN  + Fore.WHITE   + ' O ' + Style.RESET_ALL,
+        'X':  Back.RED    + Fore.WHITE   + ' X ' + Style.RESET_ALL,
+        'H':  Back.RED    + Fore.WHITE   + ' H ' + Style.RESET_ALL,
+        'W':  Back.CYAN   + Fore.BLUE    + ' W ' + Style.RESET_ALL,
+        '_':  Back.CYAN   + Fore.BLUE    + ' _ ' + Style.RESET_ALL,
+    }
+
+    print(f"\n{'='*35}")
+    print(f"  {titulo}")
+    print(f"{'='*35}")
+    # Cabecera de columnas
+    print("    " + "  ".join(str(i) for i in range(tablero.shape[1])))
+    for i, fila in enumerate(tablero):
+        fila_str = f" {i} |"
+        for celda in fila:
+            fila_str += CELDA.get(celda, f' {celda} ')
+        print(fila_str)
+    print()
 
 # Tab def, tab at, barcos, create tab, disparar, recibir disparo
 class Player:
@@ -35,13 +70,13 @@ class Player:
             fila = pieza[0]
             columna = pieza[1]
             if fila < 0  or fila >= num_max_filas:
-                print(f"No puedo poner la pieza {pieza} porque se sale del tablero")
+                # print(f"No puedo poner la pieza {pieza} porque se sale del tablero")
                 return False
             if columna <0 or columna>= num_max_columnas:
-                print(f"No puedo poner la pieza {pieza} porque se sale del tablero")
+                # print(f"No puedo poner la pieza {pieza} porque se sale del tablero")
                 return False
             if tablero[pieza] == "O" or tablero[pieza] == "X":
-                print(f"No puedo poner la pieza {pieza} porque hay otro barco")
+                # print(f"No puedo poner la pieza {pieza} porque hay otro barco")
                 return False
             tablero_temp[pieza] = "O"
         return tablero_temp
@@ -57,10 +92,10 @@ class Player:
             barco = []
             # Construimos el hipotetico barco
             pieza_original = (random.randint(0,num_max_filas-1),random.randint(0, num_max_columnas -1))
-            print("Pieza original:", pieza_original)
+            # print("Pieza original:", pieza_original)
             barco.append(pieza_original)
             orientacion = random.choice(["N","S","O","E"])
-            print("Con orientacion", orientacion)
+            # print("Con orientacion", orientacion)
             fila = pieza_original[0]
             columna = pieza_original[1]
             for i in range(eslora -1):
@@ -78,7 +113,7 @@ class Player:
             if type(tablero_temp) == np.ndarray:
                 self.barcos_p1.append(barco)
                 return tablero_temp
-            print("Tengo que intentar colocar otro barco")
+            # print("Tengo que intentar colocar otro barco")
 
     def create_p1_def(self):
         """
@@ -111,7 +146,7 @@ class Player:
         if tablero_def[coordenada] == "O":
             tablero_at[coordenada] = "H"
             print("P1, le has dado a la maquina!")
-            print(tablero_at)
+            print_tablero(tablero_at, "Tablero de ataque P1")
             enemigo.recibir_disparo_m1_v2_esp(tablero_def, coordenada)
             d_list = []
             d = input(f'Has dado en el clavo en la coordenada ({coordenada[0]}, {coordenada[1]}). \n Dame otra coordenada: ')
@@ -135,7 +170,7 @@ class Player:
         else:
             print("¿Cuando llega aquí?")
         enemigo.recibir_disparo_m1_v2(tablero_def, coordenada)
-        print(f"Tablero de ataque de P1 \n {tablero_at}")
+        print_tablero(tablero_at, "Tablero de ataque P1")
         print('*'*50)
         return(tablero_at)
 
@@ -149,7 +184,7 @@ class Player:
         if tablero_def[coordenada] == "O":
             tablero_at[coordenada] = "H"
             print('*'*50)
-            print(f"Tablero de ataque de P1 \n {tablero_at}")
+            print_tablero(tablero_at, "Tablero de ataque P1")
             print('*'*50)
             print("P1, le has dado a la maquina! Pero que maquina!")
             enemigo.recibir_disparo_m1_v2_esp(tablero_def, coordenada)
@@ -174,7 +209,7 @@ class Player:
             print("Agua, pero ya era agua. Estás bien?")
         else:
             print("¿Cuando llega aquí?")
-        enemigo.recibir_disparo_m1_v2(tablero_def, coordenada)
+        # enemigo.recibir_disparo_m1_v2(tablero_def, coordenada)
         
         return(tablero_at)
     
@@ -190,7 +225,7 @@ class Player:
         else:
             tablero_def[coordenada] = "_"
             print("Uff, menos mal")
-        print(f"Tablero de defensa de P1 \n {tablero_def}")
+        print_tablero(tablero_def, "Tablero de defensa P1")
         print('*'*50)
         return tablero_def
     
@@ -292,7 +327,7 @@ class Machine:
         else:
             tablero_def[coordenada] = "_"
             print("Bip Bup, you just hit water")
-        print(f"Tablero de defensa de M1 \n {tablero_def}")
+        print_tablero(tablero_def, "Tablero de defensa M1")
         print('*'*50)
         return tablero_def
     
@@ -384,9 +419,9 @@ class Barco:
 
     def check_sunked(self):
         """
-        Verifica si hits >= eslora-1, marca sunked=True e imprime "Barco [nombre] hundido" para mostrar estado tocado/hundido.
+        Verifica si hits >= eslora, marca sunked=True e imprime "Barco [nombre] hundido" para mostrar estado tocado/hundido.
         """
-        if self.hits == self.lenght - 1:
+        if self.hits >= self.lenght:
             self.sunked = True
             print(f"Barco {self.name} hundido")
 
